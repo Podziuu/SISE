@@ -22,4 +22,4 @@ def bfs(start_state):
                         neighbor = neighbor.parent
                     path.reverse()
                     return path
-            queue.append(neighbor)
+                queue.append(neighbor)

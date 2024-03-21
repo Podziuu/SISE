@@ -23,3 +23,4 @@ class Node:
             new_state = self.state[:]
             new_state[empty], new_state[empty + 4] = new_state[empty + 4], new_state[empty]
             neighbors.append(Node(new_state, self, "D"))
+        return neighbors
