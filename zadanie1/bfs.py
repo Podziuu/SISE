@@ -5,8 +5,6 @@ def bfs(start_state, order):
     start_node = Node(start_state)
     if start_node.state == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]:
         return []
-    
-    print(order)
 
     visited = set()
     visited.add(tuple(start_node.state))
