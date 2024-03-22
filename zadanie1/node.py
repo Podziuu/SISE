@@ -1,3 +1,5 @@
+from constants import StateConstants
+
 class Node:
     def __init__(self, state, metric=None, parent=None, action=None):
         self.state = state # stan węzła
@@ -41,6 +43,6 @@ class Node:
     
     def __lt__(self, other):
         if self.metric == "hamm":
-            return self.depth + self.hamming_distance([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]) < (other.depth + other.hamming_distance([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]))
+            return self.depth + self.hamming_distance(StateConstants.GOAL_STATE.value) < (other.depth + other.hamming_distance(StateConstants.GOAL_STATE.value))
         elif self.metric == "manh":
-            return (self.depth + self.manhattan_distance([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]) < (other.depth + other.manhattan_distance([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0])))
+            return (self.depth + self.manhattan_distance(StateConstants.GOAL_STATE.value) < (other.depth + other.manhattan_distance(StateConstants.GOAL_STATE.value)))

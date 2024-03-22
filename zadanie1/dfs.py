@@ -32,7 +32,8 @@ def dfs(start_state, order):
             return path
 
         for direction in reversed(order):
-            neighbor = node.get_neighbors(direction)
+            neighbors = node.get_neighbors(direction)
+            neighbor = neighbors[0] if neighbors else None
             if neighbor is not None:
                 neighbor_state_tuple = tuple(neighbor.state)
                 if tuple(neighbor_state_tuple) not in visited:

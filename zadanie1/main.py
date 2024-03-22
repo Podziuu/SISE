@@ -6,6 +6,7 @@ from astar import astar
 start_state = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 0, 11, 13, 14, 15, 12]
 solution = bfs(start_state, "LURD")
 solution2 = astar(start_state, "hamm")
+solution3 = dfs(start_state, "LURD")
 print("Rozwiązanie:", solution)
-print("Rozwiazanie DFS", solution2)
-#print("Rozwiązanie2:", solution3)
+print("Rozwiązanie2:", solution2)
+print("Rozwiazanie DFS", solution3)
