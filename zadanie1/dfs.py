@@ -3,7 +3,7 @@ from collections import deque
 from node import Node
 
 def dfs(start_state, order):
-    maxDepth = 8
+    maxDepth = 25
     start_node = Node(start_state)
     if start_node.state == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]:
         return []
@@ -23,6 +23,9 @@ def dfs(start_state, order):
         # print(node.state[12:16])
         # print()
 
+        node_state_tuple = tuple(node.state)
+        visited.add(node_state_tuple)
+
         if node.state == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]:
             path = []
             while node.parent:
@@ -32,9 +35,9 @@ def dfs(start_state, order):
             return path
 
         for direction in reversed(order):
-            neighbor = node.get_neighbors(direction)
+            neighbors = node.get_neighbors(direction)
+            neighbor = neighbors[0] if neighbors else None
             if neighbor is not None:
                 neighbor_state_tuple = tuple(neighbor.state)
                 if tuple(neighbor_state_tuple) not in visited:
-                    visited.add(neighbor_state_tuple)
                     stack.append((neighbor))
