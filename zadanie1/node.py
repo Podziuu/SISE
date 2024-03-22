@@ -7,6 +7,7 @@ class Node:
         self.action = action # ruch, którym rodzic przeszedł do tego węzła
         self.depth = 0 if parent is None else parent.depth + 1 # głębokość węzła
         self.metric = metric if parent is None else parent.metric # metryka
+        self.visited = False # czy węzeł był odwiedzony
         
     def get_neighbors(self, direction=None):
         neighbors = []
@@ -28,6 +29,7 @@ class Node:
             new_state[empty], new_state[empty + 4] = new_state[empty + 4], new_state[empty]
             neighbors.append(Node(new_state, None, self, "D"))
         return neighbors
+    
     
     def hamming_distance(self, goal_state):
         return sum(s != g and s!= 0 for s, g in zip(self.state, goal_state))
