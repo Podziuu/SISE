@@ -27,7 +27,8 @@ def bfs(start_state, order):
             return path
 
         for direction in order:
-            neighbor = node.get_neighbors(direction)
+            neighbors = node.get_neighbors(direction)
+            neighbor = neighbors[0] if neighbors else None
             if neighbor is not None:
                 neighbor_state_tuple = tuple(neighbor.state)
                 if neighbor_state_tuple not in visited:
