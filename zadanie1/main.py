@@ -8,8 +8,8 @@ start_state = [1, 2, 3, 4,
 13, 9, 15, 11,
 0, 10, 14, 12]
 solution = bfs(start_state, "LURD")
-solution2 = dfs(start_state, "LURD")
-#solution3 = astar(start_state, "hamm")
+solution2 = astar(start_state, "hamm")
+solution3 = dfs(start_state, "LURD")
 print("Rozwiązanie:", solution)
-print("Rozwiazanie DFS", solution2)
-#print("Rozwiązanie2:", solution3)
+print("Rozwiązanie2:", solution2)
+print("Rozwiazanie DFS", solution3)

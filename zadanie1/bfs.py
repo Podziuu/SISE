@@ -1,9 +1,10 @@
 from collections import deque
 from node import Node
+from constants import StateConstants
 
 def bfs(start_state, order):
     start_node = Node(start_state)
-    if start_node.state == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]:
+    if start_node.state == StateConstants.GOAL_STATE.value:
         return []
 
     visited = set()
@@ -18,7 +19,7 @@ def bfs(start_state, order):
         # print(node.state[12:16])
         # print()
 
-        if node.state == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]:
+        if node.state == StateConstants.GOAL_STATE.value:
             path = []
             while node.parent:
                 path.append(node.action)
