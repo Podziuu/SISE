@@ -1,7 +1,7 @@
 from constants import StateConstants
 
 class Node:
-    def __init__(self, state, metric=None, parent=None, action=None):
+    def __init__(self, state, metric=None, parent=None, action="ROOT"):
         self.state = state # stan węzła
         self.parent = parent # rodzic węzła
         self.action = action # ruch, którym rodzic przeszedł do tego węzła
@@ -12,19 +12,19 @@ class Node:
     def get_neighbors(self, direction=None):
         neighbors = []
         empty = self.state.index(0)
-        if empty % 4 != 0 and direction in ["L", None]: # ruch w lewo
+        if empty % 4 != 0 and self.action != "R" and direction in ["L", None]: # ruch w lewo
             new_state = self.state[:]
             new_state[empty], new_state[empty - 1] = new_state[empty - 1], new_state[empty]
             neighbors.append(Node(new_state, None, self, "L"))
-        if empty % 4 != 3 and direction in ["R", None]: # ruch w prawo
+        if empty % 4 != 3 and self.action != "L" and direction in ["R", None]: # ruch w prawo
             new_state = self.state[:]
             new_state[empty], new_state[empty + 1] = new_state[empty + 1], new_state[empty]
             neighbors.append(Node(new_state, None, self, "R"))
-        if empty > 3 and direction in ["U", None]: # ruch w góre
+        if empty > 3  and self.action != "D"and direction in ["U", None]: # ruch w góre
             new_state = self.state[:]
             new_state[empty], new_state[empty - 4] = new_state[empty - 4], new_state[empty]
             neighbors.append(Node(new_state, None, self, "U"))
-        if empty < 12 and direction in ["D", None]: # ruch w dół
+        if empty < 12 and self.action != "U" and direction in ["D", None]: # ruch w dół
             new_state = self.state[:]
             new_state[empty], new_state[empty + 4] = new_state[empty + 4], new_state[empty]
             neighbors.append(Node(new_state, None, self, "D"))
