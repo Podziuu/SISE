@@ -1,8 +1,10 @@
 from queue import PriorityQueue
 from node import Node
 from constants import StateConstants
+import time
 
 def astar(start_state, heuristic):
+    startTime = time.time()
     start_node = Node(start_state, heuristic)
     if start_node.state == StateConstants.GOAL_STATE.value:
         return []
@@ -19,12 +21,14 @@ def astar(start_state, heuristic):
         visited.add(tuple(node.state))
         
         if node.state == StateConstants.GOAL_STATE.value:
+            nodeDept = node.depth
             path = []
             while node.parent:
                 path.append(node.action)
                 node = node.parent
             path.reverse()
-            return path, visited_count, processed_count
+            endTime = time.time()
+            return path, len(path), visited_count, processed_count, nodeDept, round((endTime - startTime) * 1000, 3)
         
         for neighbor in node.get_neighbors():
             if tuple(neighbor.state) not in visited:
