@@ -10,9 +10,6 @@ solution2 = astar(start_state, "hamm")
 # solution3 = dfs(start_state, "LURD", 0)
 print("Rozwiązanie BFS:", solution)
 print("Rozwiązanie A*:", solution2)
-# print("Rozwiazanie DFS", solution3)
-
-# print(dfs(start_state, "LURD", 12))
 
 for i in range(24):
     solution3 = dfs(start_state, "LURD", i)

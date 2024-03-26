@@ -18,11 +18,6 @@ def bfs(start_state, order):
     while queue:
         node = queue.popleft()
         processed_count += 1
-        # print(node.state[:4])
-        # print(node.state[4:8])
-        # print(node.state[8:12])
-        # print(node.state[12:16])
-        # print()
 
         if node.state == StateConstants.GOAL_STATE.value:
             nodeDepth = node.depth
