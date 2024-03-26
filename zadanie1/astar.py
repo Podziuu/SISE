@@ -11,12 +11,12 @@ def astar(start_state, heuristic, size):
     
     visited = set()
     queue = PriorityQueue()
-    queue.put((0, start_node))
+    queue.put(start_node)
     visited_count = 1
     processed_count = 0
     
     while not queue.empty():
-        node = queue.get()[1]
+        node = queue.get()
         processed_count += 1
         visited.add(tuple(node.state))
         
@@ -32,12 +32,8 @@ def astar(start_state, heuristic, size):
         
         for neighbor in node.get_neighbors():
             if tuple(neighbor.state) not in visited:
-                if heuristic == "hamm":
-                    distance = neighbor.hamming_distance(StateConstants.get_goal_state(size[0], size[1]))
-                elif heuristic == "manh":
-                    distance = neighbor.manhattan_distance(StateConstants.get_goal_state(size[0], size[1]))
                 visited_count += 1
-                queue.put((distance + neighbor.depth, neighbor))
+                queue.put(neighbor)
                 visited.add(tuple(neighbor.state))
     
     endTime = time.time()

@@ -42,7 +42,9 @@ class Node:
         for i in range(size):
             if self.state[i] != 0:
                 goal_index = goal_state.index(self.state[i])
-                distance += abs(i % 4 - goal_index % 4) + abs(i // 4 - goal_index // 4)
+                current_row, current_col = i // self.cols, i % self.cols
+                goal_row, goal_col = goal_index // self.cols, goal_index % self.cols
+                distance += abs(current_row - goal_row) + abs(current_col - goal_col)
         return distance
     
     def __lt__(self, other):
