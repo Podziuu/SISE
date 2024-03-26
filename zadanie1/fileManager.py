@@ -1,5 +1,16 @@
 class FileManager:
-    # def __init__(self):
+
+    def getPuzzle(fileName):
+        with open("ukladanki/" + fileName, "r") as file:
+            lines = file.readlines()
+            dimensions = list(map(int, lines[0].split()))
+
+            state = []
+            for line in lines[1:]:
+                row = list(map(int, line.split()))
+                state.extend(row)
+
+            return dimensions, state
 
     def writeToFile(text, fileName, type=None):
         if(type == "sol"):

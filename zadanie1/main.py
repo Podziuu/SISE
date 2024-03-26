@@ -9,14 +9,15 @@ additional_parameter = sys.argv[2]
 input_filename = sys.argv[3]
 output_filename = sys.argv[4]
 additional_output_filename = sys.argv[5]
-start_state = [1, 2, 3, 4, 5, 6, 11, 7, 9, 10, 0, 8, 13, 14, 15, 12]
+
+dimensions, start_state = FileManager.getPuzzle(input_filename)
 
 if(strategy == "bfs"):
-    solution = bfs(start_state, additional_parameter, [4, 4])
+    solution = bfs(start_state, additional_parameter, dimensions)
 elif(strategy == "dfs"):
-    solution = dfs(start_state, additional_parameter, [4, 4])
+    solution = dfs(start_state, additional_parameter, dimensions)
 elif(strategy == "astr"):
-    solution = astar(start_state, additional_parameter, [4,4])
+    solution = astar(start_state, additional_parameter, dimensions)
     
 FileManager.writeToFile(solution, output_filename, "sol")
 FileManager.writeToFile(solution, additional_output_filename, "stats")

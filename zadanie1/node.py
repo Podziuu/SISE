@@ -14,19 +14,19 @@ class Node:
     def get_neighbors(self, direction=None):
         neighbors = []
         empty = self.state.index(0)
-        if empty % 4 != 0 and self.action != "R" and direction in ["L", None]: # ruch w lewo
+        if empty % self.cols != 0 and self.action != "R" and direction in ["L", None]: # ruch w lewo
             new_state = self.state[:]
             new_state[empty], new_state[empty - 1] = new_state[empty - 1], new_state[empty]
             neighbors.append(Node(new_state, self.rows, self.cols, self.metric, self, "L"))
-        if empty % 4 != 3 and self.action != "L" and direction in ["R", None]: # ruch w prawo
+        if empty % self.cols != (self.cols - 1) and self.action != "L" and direction in ["R", None]: # ruch w prawo
             new_state = self.state[:]
             new_state[empty], new_state[empty + 1] = new_state[empty + 1], new_state[empty]
             neighbors.append(Node(new_state, self.rows, self.cols, self.metric, self, "R"))
-        if empty > 3  and self.action != "D"and direction in ["U", None]: # ruch w góre
+        if empty >= self.cols and self.action != "D"and direction in ["U", None]: # ruch w góre
             new_state = self.state[:]
             new_state[empty], new_state[empty - 4] = new_state[empty - 4], new_state[empty]
             neighbors.append(Node(new_state, self.rows, self.cols, self.metric, self, "U"))
-        if empty < 12 and self.action != "U" and direction in ["D", None]: # ruch w dół
+        if empty < (self.rows - 1) * self.cols and self.action != "U" and direction in ["D", None]: # ruch w dół
             new_state = self.state[:]
             new_state[empty], new_state[empty + 4] = new_state[empty + 4], new_state[empty]
             neighbors.append(Node(new_state, self.rows, self.cols, self.metric, self, "D"))
