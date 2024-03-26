@@ -3,10 +3,10 @@ from node import Node
 from constants import StateConstants
 import time
 
-def bfs(start_state, order):
+def bfs(start_state, order, size):
     startTime = time.time()
-    start_node = Node(start_state)
-    if start_node.state == StateConstants.GOAL_STATE.value:
+    start_node = Node(start_state, size[0], size[1])
+    if start_node.state == StateConstants.get_goal_state(size[0], size[1]):
         return [], 1, 0
 
     visited = set()
@@ -19,7 +19,7 @@ def bfs(start_state, order):
         node = queue.popleft()
         processed_count += 1
 
-        if node.state == StateConstants.GOAL_STATE.value:
+        if node.state == StateConstants.get_goal_state(size[0], size[1]):
             nodeDepth = node.depth
             path = []
             while node.parent:
@@ -38,3 +38,6 @@ def bfs(start_state, order):
                     visited_count += 1  
                     visited.add(neighbor_state_tuple)
                     queue.append(neighbor)
+                    
+    endTime = time.time()
+    return [-1, [], visited_count, processed_count, node.depth, round((endTime - startTime) * 1000, 3)]

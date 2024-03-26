@@ -3,10 +3,10 @@ from node import Node
 from constants import StateConstants
 import time
 
-def astar(start_state, heuristic):
+def astar(start_state, heuristic, size):
     startTime = time.time()
-    start_node = Node(start_state, heuristic)
-    if start_node.state == StateConstants.GOAL_STATE.value:
+    start_node = Node(start_state, size[0], size[1], heuristic)
+    if start_node.state == StateConstants.get_goal_state(size[0], size[1]):
         return []
     
     visited = set()
@@ -20,7 +20,7 @@ def astar(start_state, heuristic):
         processed_count += 1
         visited.add(tuple(node.state))
         
-        if node.state == StateConstants.GOAL_STATE.value:
+        if node.state == StateConstants.get_goal_state(size[0], size[1]):
             nodeDept = node.depth
             path = []
             while node.parent:
@@ -33,11 +33,12 @@ def astar(start_state, heuristic):
         for neighbor in node.get_neighbors():
             if tuple(neighbor.state) not in visited:
                 if heuristic == "hamm":
-                    distance = neighbor.hamming_distance(StateConstants.GOAL_STATE.value)
+                    distance = neighbor.hamming_distance(StateConstants.get_goal_state(size[0], size[1]))
                 elif heuristic == "manh":
-                    distance = neighbor.manhattan_distance(StateConstants.GOAL_STATE.value)
+                    distance = neighbor.manhattan_distance(StateConstants.get_goal_state(size[0], size[1]))
                 visited_count += 1
                 queue.put((distance + neighbor.depth, neighbor))
                 visited.add(tuple(neighbor.state))
     
-    return None
+    endTime = time.time()
+    return [-1, [], visited_count, processed_count, node.depth, round((endTime - startTime) * 1000, 3)]

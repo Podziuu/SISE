@@ -1,4 +1,5 @@
 from enum import Enum
 
 class StateConstants(Enum):
-    GOAL_STATE = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 0]
+    def get_goal_state(rows, cols):
+        return [i + 1 if i < rows * cols - 1 else 0 for i in range(rows * cols)]

@@ -4,11 +4,11 @@ from node import Node
 from constants import StateConstants
 import time
 
-def dfs(start_state, order, max):
+def dfs(start_state, order, size):
     startTime = time.time()
-    maxDepth = max
-    start_node = Node(start_state)
-    if start_node.state == StateConstants.GOAL_STATE.value:
+    maxDepth = 20
+    start_node = Node(start_state, size[0], size[1])
+    if start_node.state == StateConstants.get_goal_state(size[0], size[1]):
         return [], 1, 0
 
     visited = set()
@@ -23,7 +23,7 @@ def dfs(start_state, order, max):
 
         visited.add(tuple(node.state) + tuple([node.depth]))
 
-        if node.state == StateConstants.GOAL_STATE.value:
+        if node.state == StateConstants.get_goal_state(size[0], size[1]):
             nodeDepth = node.depth
             path = []
             while node.parent:
@@ -42,3 +42,6 @@ def dfs(start_state, order, max):
                 if tuple(neighbor.state) + tuple([neighbor.depth]) not in visited:
                     visited_count += 1 
                     stack.append(neighbor)
+    
+    endTime = time.time()
+    return [-1, [], visited_count, processed_count, node.depth, round((endTime - startTime) * 1000, 3)]
