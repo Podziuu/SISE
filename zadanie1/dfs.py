@@ -2,43 +2,45 @@ from collections import deque
 
 from node import Node
 from constants import StateConstants
+import time
 
-def dfs(start_state, order, depth):
-    max_depth = depth
-    visited = set()
-    visited_count = 1
-    processed_count = 0
-    node = Node(start_state)
+# def dfs(start_state, order, depth):
+#     max_depth = depth
+#     visited = set()
+#     visited_count = 1
+#     processed_count = 0
+#     node = Node(start_state)
     
-    def recursive_dfs(node, visited, depth):
-        nonlocal visited_count, processed_count
-        processed_count += 1
+#     def recursive_dfs(node, visited, depth):
+#         nonlocal visited_count, processed_count
+#         processed_count += 1
         
-        if depth > max_depth:
-            return None
+#         if depth > max_depth:
+#             return None
         
-        if tuple(node.state) not in visited:
-            if node.state == StateConstants.GOAL_STATE.value:
-                path = []
-                while node.parent:
-                    path.append(node.action)
-                    node = node.parent
-                path.reverse()
-                return path
-            visited_count += 1
-            for direction in order:
-                neighbors = node.get_neighbors(direction)
-                neighbor = neighbors[0] if neighbors else None
-                if neighbor is not None:
-                    result = recursive_dfs(neighbor, visited, depth + 1)
-                    if result is not None:
-                        visited.add(tuple(node.state))  
-                        return result
+#         if tuple(node.state) not in visited:
+#             if node.state == StateConstants.GOAL_STATE.value:
+#                 path = []
+#                 while node.parent:
+#                     path.append(node.action)
+#                     node = node.parent
+#                 path.reverse()
+#                 return path
+#             visited_count += 1
+#             for direction in order:
+#                 neighbors = node.get_neighbors(direction)
+#                 neighbor = neighbors[0] if neighbors else None
+#                 if neighbor is not None:
+#                     visited.add(tuple(node.state))  
+#                     result = recursive_dfs(neighbor, visited, depth + 1)
+#                     if result is not None:
+                        
+#                         return result
             
     
-    path = recursive_dfs(node, visited, 0)
+#     path = recursive_dfs(node, visited, 0)
     
-    return path, visited_count, processed_count
+#     return path, visited_count, processed_count
             
         
 
@@ -107,49 +109,41 @@ def dfs(start_state, order, depth):
     
 #     return path, visited_count, processed_count
 
-# def dfs(start_state, order, max):
-#     maxDepth = max
-#     start_node = Node(start_state)
-#     if start_node.state == StateConstants.GOAL_STATE.value:
-#         return [], 1, 0
+def dfs(start_state, order, max):
+    startTime = time.time()
+    maxDepth = max
+    start_node = Node(start_state)
+    if start_node.state == StateConstants.GOAL_STATE.value:
+        return [], 1, 0
 
-#     visited = set()
-#     stack = deque([start_node])
-#     visited_count = 1
-#     processed_count = 0
+    visited = set()
+    stack = deque([start_node])
+    visited_count = 0
+    processed_count = 0
 
-#     while stack:
-#         node = stack.pop()
-#         # print(node.depth)
-#         processed_count += 1
-#         node.visited = True
+    while stack:
+        node = stack.pop()
+        processed_count += 1
+        node.visited = True
 
-#         # if node.depth > maxDepth:
-#         #     continue
+        visited.add(tuple(node.state) + tuple([node.depth]))
 
-#         if node.state == StateConstants.GOAL_STATE.value:
-#             path = []
-#             while node.parent:
-#                 path.append(node.action)
-#                 node = node.parent
-#             path.reverse()
-#             return path, len(visited), processed_count
-        
-#         node_state_tuple = tuple(node.state)
-        
-#         # print(node.all_neighbors_visited())
-#         # if node.all_neighbors_visited(maxDepth):
-#         #     print("witam")
-#         #     visited.add(node_state_tuple)
-            
-#         for direction in reversed(order):
-#             neighbors = node.get_neighbors(direction)
-#             neighbor = neighbors[0] if neighbors else None
-#             if neighbor is not None:
-#                 if neighbor.depth > maxDepth:
-#                     neighbor.visited = True
-#                     continue
-#                 neighbor_state_tuple = tuple(neighbor.state)
-#                 if tuple(neighbor_state_tuple) not in visited:
-#                     visited_count += 1 
-#                     stack.append(neighbor)
+        if node.state == StateConstants.GOAL_STATE.value:
+            nodeDepth = node.depth
+            path = []
+            while node.parent:
+                path.append(node.action)
+                node = node.parent
+            path.reverse()
+            endTime = time.time()
+            return path, len(path), visited_count, processed_count, nodeDepth, round((endTime - startTime) * 1000, 3)
+       
+        for direction in reversed(order):
+            neighbors = node.get_neighbors(direction)
+            neighbor = neighbors[0] if neighbors else None
+            if neighbor is not None:
+                if neighbor.depth > maxDepth:
+                    continue
+                if tuple(neighbor.state) + tuple([neighbor.depth]) not in visited:
+                    visited_count += 1 
+                    stack.append(neighbor)
