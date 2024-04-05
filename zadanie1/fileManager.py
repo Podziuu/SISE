@@ -20,7 +20,8 @@ class FileManager:
                 else:
                     file.write(str(text[1]))
                     file.write("\n")
-                    file.write(str(text[0]))
+                    solution = ''.join(text[0])
+                    file.write(solution)
                     file.close()
         elif(type == "stats"):
             with open("results/" + fileName, 'w') as file:
