@@ -11,7 +11,7 @@ iris = fetch_ucirepo(id=53)
 X = iris.data.features 
 y = iris.data.targets 
 
-
+x_array = X.to_numpy()
 
 num_layers = int(input("Podaj liczbe warstw ukrytych: "))
 num_neurons = [4]
@@ -21,13 +21,16 @@ for i in range(num_layers):
 num_neurons.append(3)
 isBias = int(input("Czy chcesz dodac bias?: "))
 
-
-
 network = Network(num_layers + 2, num_neurons, isBias)
 
-for Layer in network.layers:
-    print("warstwa")
-    for Neuron in Layer.neurons:
-        print(Neuron.weights)
-        print(Neuron.bias)
+x = network.forward(x_array[0])
+
+print(x)
+
+# for Layer in network.layers:
+#     print(Layer.forward(x_array[0]))
+    # print("warstwa")
+    # for Neuron in Layer.neurons:
+    #     print(Neuron.weights)
+    #     print(Neuron.bias)
     
