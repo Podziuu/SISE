@@ -1,6 +1,8 @@
 from ucimlrepo import fetch_ucirepo 
 import numpy as np
 from neuron import Neuron
+from layer import Layer
+from network import Network
   
 # fetch dataset 
 iris = fetch_ucirepo(id=53) 
@@ -9,10 +11,23 @@ iris = fetch_ucirepo(id=53)
 X = iris.data.features 
 y = iris.data.targets 
 
-input = np.array([1, 2, 3, 4])
-weights = np.array([0.5, -0.3, 0, 0.11])
-neuron = Neuron(weights, 0)
-
-print(neuron.forward(input))
 
 
+num_layers = int(input("Podaj liczbe warstw ukrytych: "))
+num_neurons = [4]
+for i in range(num_layers):
+    num_neurons.append(int(input("Podaj liczbe neuronow w " + str(i + 1)  + " warstwie ukrytej: ")))
+
+num_neurons.append(3)
+isBias = int(input("Czy chcesz dodac bias?: "))
+
+
+
+network = Network(num_layers + 2, num_neurons, isBias)
+
+for Layer in network.layers:
+    print("warstwa")
+    for Neuron in Layer.neurons:
+        print(Neuron.weights)
+        print(Neuron.bias)
+    
