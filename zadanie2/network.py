@@ -11,10 +11,21 @@ class Network:
             x = layer.forward(x)
         return x
 
-    def backward(self, grad):
-        for layer in reversed(self.layers):
-            grad = layer.backward(grad)
-        return grad
+    def backward(self, expected):
+        test = self.layers[-1].backward(expected)
+        print(test)
+
+        # errors = np.array()
+
+        # for i in range(len(self.layers[-1].neurons)):
+        #     errors.append(self.layers[-1].neurons[i].output - expected[i])
+        #     self.layers[-1].neurons[i].grad = errors[i] * self.layers[-1].neurons[i].output * (1 - self.layers[-1].neurons[i].output)
+
+        #error = np.sum(0.5 * (expected - self.layers[-1].output) ** 2)
+
+        # for layer in reversed(self.layers):
+        #     grad = layer.backward(grad)
+        # return grad
 
     def update(self, lr):
         for layer in self.layers:
