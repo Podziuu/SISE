@@ -25,12 +25,15 @@ network = Network(num_layers + 2, num_neurons, isBias)
 
 x = network.forward(x_array[0])
 
-print(x)
+# print(x)
 
-# for Layer in network.layers:
-#     print(Layer.forward(x_array[0]))
-    # print("warstwa")
-    # for Neuron in Layer.neurons:
-    #     print(Neuron.weights)
-    #     print(Neuron.bias)
+z = np.array([1, 0, 0])
+# print(z)
+
+network.backward(z)
+
+for Layer in network.layers:
+    print("warstwa")
+    for Neuron in Layer.neurons:
+        print(Neuron.grad)
     

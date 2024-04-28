@@ -10,6 +10,13 @@ class Layer:
         self.output = np.array([neuron.forward(inputs) for neuron in self.neurons])
         return self.output
 
-    def backward(self, grad):
-        self.grads = np.array([neuron.backward(grad) for neuron in self.neurons])
-        return self.grads
+    def backward(self, grad, isLast = False):
+        errors = np.array([neuron.backward(grad, isLast) for neuron in self.neurons])
+        # for neuron in self.neurons:
+        #     errors.append(neuron.backward(grad, isLast))
+        return errors
+        # for i in range(len(self.neurons)):
+        #     self.neurons[i].grad = errors[i]
+        # self.grads = np.array([neuron.backward(grad, isLast) for neuron in self.neurons])
+        # return self.grads
+        # return [neuron.backward(grad, isLast) for neuron in self.neurons]

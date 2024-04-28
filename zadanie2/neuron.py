@@ -14,9 +14,22 @@ class Neuron:
         self.output = 1/(1 + np.exp(-total))
         return self.output
     
-    def backward(self, grad):
-        self.grad = grad * self.output * (1 - self.output)
+    def backward(self, grad, isLast = False):
+        # print(grad, "GRAD")
+        if(isLast):
+            self.grad = grad * self.output * (1 - self.output)
+        else:
+            self.grad = self.weights * grad;
+        print(self.grad)
         return self.grad
+    
+    # def backward(self, grad, last_layer = False):
+    #     print(grad, "GRAD")
+    #     if(last_layer):
+    #         self.grad = grad * self.output * (1 - self.output)
+    #     else:
+    #         self.grad = self.weights * grad;
+    #     return self.grad
 
     def update(self, weights, bias):
         self.weights = weights
