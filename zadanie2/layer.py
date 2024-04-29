@@ -20,3 +20,11 @@ class Layer:
         # self.grads = np.array([neuron.backward(grad, isLast) for neuron in self.neurons])
         # return self.grads
         # return [neuron.backward(grad, isLast) for neuron in self.neurons]
+
+    def backward2last(self, targets):
+        for i in range(len(self.neurons)):
+            self.neurons[i].backward2last(targets[i])
+
+    def backward2(self, next_neurons):
+        for i in range(len(self.neurons)):
+            self.neurons[i].backward2(next_neurons, i)

@@ -10,7 +10,8 @@ class Neuron:
             self.bias = 0
 
     def forward(self, inputs):
-        total = np.dot(self.weights, inputs) + self.bias
+        self.inputs = inputs
+        total = np.dot(self.weights, self.inputs) + self.bias
         self.output = 1/(1 + np.exp(-total))
         return self.output
     
@@ -19,7 +20,7 @@ class Neuron:
         if(isLast):
             self.grad = grad * self.output * (1 - self.output)
         else:
-            self.grad = self.weights * grad;
+            self.grad = self.weights * grad
         print(self.grad)
         return self.grad
     
@@ -30,6 +31,22 @@ class Neuron:
     #     else:
     #         self.grad = self.weights * grad;
     #     return self.grad
+
+    def backward2last(self, target):
+        factor1 = target - self.output
+        factor2 = self.output * (1 - self.output)
+        for i in range(len(self.weights)):
+            self.grad = factor1 * factor2
+            self.weights[i] += 0.1 * self.grad * self.inputs[i]
+
+    def backward2(self, next_neurons, index):
+        factor1 = 0
+        for neuron in next_neurons:
+            factor1 += neuron.grad * neuron.weights[index]
+        factor2 = self.output * (1 - self.output)
+        self.grad = factor1 * factor2
+        for i in range(len(self.weights)):
+            self.weights[i] += 0.1 * self.grad * self.inputs[i]
 
     def update(self, weights, bias):
         self.weights = weights
