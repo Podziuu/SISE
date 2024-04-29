@@ -22,8 +22,7 @@ class Neuron:
 
     def backward(self, next_neurons, index):
         factor1 = 0
-        for neuron in next_neurons:
-            factor1 += neuron.grad * neuron.weights[index]
+        factor1 = np.dot([neuron.grad for neuron in next_neurons], [neuron.weights[index] for neuron in next_neurons])
         factor2 = self.output * (1 - self.output)
         self.grad = factor1 * factor2
 
