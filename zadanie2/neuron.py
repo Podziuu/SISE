@@ -19,8 +19,6 @@ class Neuron:
         factor1 = target - self.output
         factor2 = self.output * (1 - self.output)
         self.grad = factor1 * factor2
-        for i in range(len(self.weights)):
-            self.weights[i] += 0.1 * self.grad * self.inputs[i]
 
     def backward(self, next_neurons, index):
         factor1 = 0
@@ -28,9 +26,8 @@ class Neuron:
             factor1 += neuron.grad * neuron.weights[index]
         factor2 = self.output * (1 - self.output)
         self.grad = factor1 * factor2
-        for i in range(len(self.weights)):
-            self.weights[i] += 0.1 * self.grad * self.inputs[i]
 
-    def update(self, weights, bias):
-        self.weights = weights
-        self.bias = bias
+    def update(self, lr):
+        for i in range(len(self.weights)):
+            self.weights[i] += lr * self.grad * self.inputs[i]
+        self.bias += lr * self.grad

@@ -16,3 +16,7 @@ class Layer:
     def backward(self, next_neurons):
         for i in range(len(self.neurons)):
             self.neurons[i].backward(next_neurons, i)
+        
+    def update(self, lr):
+        for neuron in self.neurons:
+            neuron.update(lr)
