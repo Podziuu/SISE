@@ -63,3 +63,6 @@ class Network:
     def update(self, lr):
         for layer in self.layers:
             layer.update(lr)
+
+    def test(self, x):
+        return self.forward(x)

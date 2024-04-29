@@ -35,8 +35,8 @@ class Neuron:
     def backward2last(self, target):
         factor1 = target - self.output
         factor2 = self.output * (1 - self.output)
+        self.grad = factor1 * factor2
         for i in range(len(self.weights)):
-            self.grad = factor1 * factor2
             self.weights[i] += 0.1 * self.grad * self.inputs[i]
 
     def backward2(self, next_neurons, index):

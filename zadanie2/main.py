@@ -3,6 +3,7 @@ import numpy as np
 from neuron import Neuron
 from layer import Layer
 from network import Network
+import random
   
 # fetch dataset 
 iris = fetch_ucirepo(id=53) 
@@ -21,10 +22,10 @@ x_array = X.to_numpy()
 # testx6 = x_array[149].copy()
 
 
-num_layers = 1#int(input("Podaj liczbe warstw ukrytych: "))
+num_layers = 2#int(input("Podaj liczbe warstw ukrytych: "))
 num_neurons = [4]
 for i in range(num_layers):
-    num_neurons.append(4)  #(int(input("Podaj liczbe neuronow w " + str(i + 1)  + " warstwie ukrytej: ")))
+    num_neurons.append(5)  #(int(input("Podaj liczbe neuronow w " + str(i + 1)  + " warstwie ukrytej: ")))
 
 num_neurons.append(3)
 isBias = 0#int(input("Czy chcesz dodac bias?: "))
@@ -44,7 +45,7 @@ for genre in true_labels:
     elif genre == "Iris-virginica":
         target_values.append([0, 0, 1])
 
-
+target_values = np.array(target_values)
 
 
 for epoch in range(num_epochs):
@@ -54,11 +55,27 @@ for epoch in range(num_epochs):
          output = network.forward(x)
          network.backward2(expected)
 
+correct = 0
+for i in range(100):
+    index = random.randint(50, 99)
+    x = x_array[index]
+    output = network.forward(x)
+    expected = target_values[index]
+    if np.argmax(output) == np.argmax(expected):
+        correct += 1
+    else:
+        print(index)
+        print(output)
+        print(expected)
 
-x = x_array[103]
-expected = target_values[103]
-output = network.forward(x)
-print(str(output) + " " + str(expected))
+print("Accuracy: " + str(correct / 100))
+# x = x_array[103]
+# expected = target_values[103]
+# output = network.forward(x)
+# position = np.argmax(output)
+# position2 = np.argmax(expected)
+# print(str(position) + " " + str(position2))
+# print(str(output) + " " + str(expected))
 
 
 
