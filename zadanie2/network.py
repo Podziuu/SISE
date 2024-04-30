@@ -16,9 +16,46 @@ class Network:
         for i in reversed(range(len(self.layers) - 1)):
             self.layers[i].backward(self.layers[i + 1].neurons)
 
-    def update(self, lr):
+    def update(self, lr, momentum):
         for layer in self.layers:
-            layer.update(lr)
+            layer.update(lr, momentum)
+
+    def train(self, combined_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch):
+        epochsTillSave = errorEpoch
+        if stopCondition == 1:
+            for epoch in range(stop):
+                if shuffle:
+                    combined_data = np.random.permutation(combined_data)
+                for i in range(len(combined_data)):
+                    x = combined_data[i][:4]
+                    expected = combined_data[i][-3:]
+                    self.forward(x)
+                    #output = self.forward(x)
+                    self.backward(expected)
+                    self.update(learning_rate, momentum)
+                    
+                    epochsTillSave -= 1
+                    if epochsTillSave == 0:
+                        #TODO save error
+                        epochsTillSave = errorEpoch
+
+        elif stopCondition == 2:
+            error = 100
+            while error > stop:
+                if shuffle:
+                    combined_data = np.random.permutation(combined_data)
+                for i in range(len(combined_data)):
+                    x = combined_data[i][:4]
+                    expected = combined_data[i][-3:]
+                    self.forward(x)
+                    #output = self.forward(x)
+                    self.backward(expected)
+                    self.update(learning_rate, momentum)
+
+                    epochsTillSave -= 1
+                    if epochsTillSave == 0:
+                        #TODO save error
+                        epochsTillSave = errorEpoch
 
     def test(self, x):
         return self.forward(x)

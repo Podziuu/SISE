@@ -8,6 +8,9 @@ class Neuron:
             self.bias = np.random.uniform(-1, 1)
         else:
             self.bias = 0
+        
+        self.deltaWeights = np.zeros(num_weights)
+        self.bias_momentum = 0
 
     def forward(self, inputs):
         self.inputs = inputs
@@ -26,7 +29,11 @@ class Neuron:
         factor2 = self.output * (1 - self.output)
         self.grad = factor1 * factor2
 
-    def update(self, lr):
+    def update(self, lr, momentum):
         for i in range(len(self.weights)):
-            self.weights[i] += lr * self.grad * self.inputs[i]
+            self.weights[i] += lr * self.grad * self.inputs[i] + momentum * self.deltaWeights[i]
         self.bias += lr * self.grad
+        if momentum > 0:
+            self.deltaWeights -= self.weights
+            self.bias_momentum -= self.bias
+        

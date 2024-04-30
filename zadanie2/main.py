@@ -1,3 +1,5 @@
+#TODO  wczytanie wzorca z pliku, czas trwania nauki
+
 from ucimlrepo import fetch_ucirepo 
 import numpy as np
 from network import Network
@@ -48,17 +50,19 @@ while True:
         option = int(input("Wybierz opcje: "))
         
     if option == 1 and isNetworkCreated:
-        learn = input("Czy chcesz losowac dane? (t/n):")
-        if learn == "t":
-            combined_data = np.random.permutation(combined_data)
-        for epoch in range(num_epochs):
-            for i in range(len(combined_data)):
-                x = combined_data[i][:4]
-                expected = combined_data[i][-3:]
-                output = network.forward(x)
-                network.backward(expected)
-                network.update(learning_rate)
+        print("Podaj warunek stopu")
+        print("1. Ilosc epok")
+        print("2. Dokladnosc")
+        stopCondition = int(input( "Wybierz opcje: "))
+        if stopCondition == 1:
+            stop = int(input("Podaj liczbe epok: "))
+        elif stopCondition == 2:
+            stop = float(input("Podaj dokladnosc: "))
+        shuffle = int(input("Czy chcesz losowac dane? "))
+        errorEpoch = int(input("Co ile epok chcesz zapisywac blad? "))
+        network.train(combined_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch)
         print("Nauka sieci zakonczona")
+
     if option == 2 and isNetworkCreated:
         correct = 0
         for i in range(150):
@@ -73,6 +77,7 @@ while True:
                 print(output)
                 print(expected)
         print("Accuracy: " + str(correct / 150))
+        
     if option == 3 and isNetworkCreated:
         print("Zapisanie sieci")
         saveNetwork(network)
@@ -81,17 +86,18 @@ while True:
     if option == 1 and not isNetworkCreated:
         print("Tworzenie nowej sieci")
         num_layers = int(input("Podaj liczbe warstw ukrytych: "))
-        num_neurons = [4]
+        num_neurons = []
         for i in range(num_layers):
             num_neurons.append(int(input("Podaj liczbe neuronow w " + str(i + 1)  + " warstwie ukrytej: ")))
 
         num_neurons.append(3)
         isBias = int(input("Czy chcesz dodac bias?: "))
 
-        num_epochs = int(input("Podaj liczbę epok: "))
+        #num_epochs = int(input("Podaj liczbę epok: "))
         learning_rate = float(input("Podaj współczynnik uczenia: "))
+        momentum = float(input("Podaj współczynnik momentum: "))
 
-        network = Network(num_layers + 2, num_neurons, isBias)
+        network = Network(num_layers + 1, num_neurons, isBias)
         
         print("Siec stworzona, co teraz chcesz robic?")
         isNetworkCreated = True

@@ -3,7 +3,7 @@ from neuron import Neuron
 
 class Layer:
     def __init__(self, num_neurons, num_neurons_in_prev, isBias):
-        self.neurons = np.array([Neuron(num_neurons_in_prev ,isBias) for i in range(num_neurons)])
+        self.neurons = np.array([Neuron(num_neurons_in_prev, isBias) for i in range(num_neurons)])
         
     def forward(self, inputs):
         self.output = np.array([neuron.forward(inputs) for neuron in self.neurons])
@@ -17,6 +17,6 @@ class Layer:
         for i in range(len(self.neurons)):
             self.neurons[i].backward(next_neurons, i)
         
-    def update(self, lr):
+    def update(self, lr, momentum):
         for neuron in self.neurons:
-            neuron.update(lr)
+            neuron.update(lr, momentum)
