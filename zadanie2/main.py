@@ -5,6 +5,7 @@ import numpy as np
 from network import Network
 import random
 import pickle
+from sklearn.metrics import confusion_matrix
 
 def saveNetwork(network):
     with open("network.pkl", "wb") as f:
@@ -33,6 +34,9 @@ for genre in true_labels:
 target_values = np.array(target_values)
 
 combined_data = np.concatenate((x_array, target_values), axis=1)
+training_data = np.concatenate((combined_data[0:35], combined_data[50:85], combined_data[100:135]), axis=0)
+test_data = np.concatenate((combined_data[35:50], combined_data[85:100], combined_data[135:150]), axis=0)
+
 
 isNetworkCreated = False
 while True:
@@ -60,23 +64,38 @@ while True:
             stop = float(input("Podaj dokladnosc: "))
         shuffle = int(input("Czy chcesz losowac dane? "))
         errorEpoch = int(input("Co ile epok chcesz zapisywac blad? "))
-        network.train(combined_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch)
+        network.train(training_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch)
         print("Nauka sieci zakonczona")
 
     if option == 2 and isNetworkCreated:
-        correct = 0
-        for i in range(150):
-            index = random.randint(0, 149)
-            x = x_array[index]
-            output = network.forward(x)
-            expected = target_values[index]
-            if np.argmax(output) == np.argmax(expected):
-                correct += 1
-            else:
-                print(index)
-                print(output)
-                print(expected)
-        print("Accuracy: " + str(correct / 150))
+        correct = [0, 0, 0]
+        predicted_labels = []
+        true_labels = []
+        for index in range(45):
+            test = test_data[index]
+            output = network.forward(test[:4])
+            expected = test[-3:]
+            true_label = np.argmax(expected)
+            predicted_label = np.argmax(output)
+            true_labels.append(true_label)
+            predicted_labels.append(predicted_label)
+            if predicted_label == true_label:
+                correct[true_label] += 1
+        accuracy = sum(correct) / (len(test_data)) * 100
+        print("Iris-setosa: " + str(correct[0] / 15 * 100) + "%")
+        print("Iris-versicolor: " + str(correct[1] / 15 * 100) + "%")
+        print("Iris-virginica: " + str(correct[2] / 15 * 100) + "%")    
+        print("Total: " + str(accuracy) + "%")
+        matrix = confusion_matrix(true_labels, predicted_labels)
+        print("\nMacierz pomyłek:")
+        print(matrix)
+        precision = np.diag(matrix) / np.sum(matrix, axis=0)
+        recall = np.diag(matrix) / np.sum(matrix, axis=1)
+        f_measure = 2 * (precision * recall) / (precision + recall)
+
+        print("\nPrecyzja (Precision):", precision)
+        print("Czułość (Recall):", recall)
+        print("Miara F (F-measure):", f_measure)
         
     if option == 3 and isNetworkCreated:
         print("Zapisanie sieci")

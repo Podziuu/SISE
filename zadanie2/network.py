@@ -24,38 +24,49 @@ class Network:
         epochsTillSave = errorEpoch
         if stopCondition == 1:
             for epoch in range(stop):
+                error = 0
                 if shuffle:
                     combined_data = np.random.permutation(combined_data)
                 for i in range(len(combined_data)):
                     x = combined_data[i][:4]
                     expected = combined_data[i][-3:]
-                    self.forward(x)
-                    #output = self.forward(x)
+                    #self.forward(x)
+                    output = self.forward(x)
                     self.backward(expected)
                     self.update(learning_rate, momentum)
+                    error += self.calculateError(expected, output)
                     
-                    epochsTillSave -= 1
-                    if epochsTillSave == 0:
-                        #TODO save error
-                        epochsTillSave = errorEpoch
+                epochsTillSave -= 1
+                if epochsTillSave == 0:
+                    with open('trainError.txt', 'a') as file:
+                        file.write(str(epoch) + " " + str(error) + "\n")
+                    epochsTillSave = errorEpoch
 
         elif stopCondition == 2:
-            error = 100
-            while error > stop:
+            for i in range(1000):
+                error = 0
                 if shuffle:
                     combined_data = np.random.permutation(combined_data)
-                for i in range(len(combined_data)):
-                    x = combined_data[i][:4]
-                    expected = combined_data[i][-3:]
-                    self.forward(x)
-                    #output = self.forward(x)
+                for j in range(len(combined_data)):
+                    x = combined_data[j][:4]
+                    expected = combined_data[j][-3:]
+                    #self.forward(x)
+                    output = self.forward(x)
                     self.backward(expected)
                     self.update(learning_rate, momentum)
+                    error += self.calculateError(expected, output)
 
-                    epochsTillSave -= 1
-                    if epochsTillSave == 0:
-                        #TODO save error
-                        epochsTillSave = errorEpoch
+                epochsTillSave -= 1
+                if epochsTillSave == 0:
+                    with open('trainError.txt', 'a') as file:
+                        file.write(str(i) + " " + str(error) + "\n")
+                    epochsTillSave = errorEpoch
+
+                if error < stop:
+                    break
+
+    def calculateError(self, target, output):
+        return np.sum((target - output) ** 2) / 2
 
     def test(self, x):
         return self.forward(x)
