@@ -34,8 +34,8 @@ for genre in true_labels:
 target_values = np.array(target_values)
 
 combined_data = np.concatenate((x_array, target_values), axis=1)
-training_data = np.concatenate((combined_data[0:35], combined_data[50:85], combined_data[100:135]), axis=0)
-test_data = np.concatenate((combined_data[35:50], combined_data[85:100], combined_data[135:150]), axis=0)
+training_data = np.concatenate((combined_data[0:15], combined_data[50:65], combined_data[100:115]), axis=0)
+test_data = np.concatenate((combined_data[15:50], combined_data[65:100], combined_data[115:150]), axis=0)
 
 
 isNetworkCreated = False
@@ -71,7 +71,7 @@ while True:
         correct = [0, 0, 0]
         predicted_labels = []
         true_labels = []
-        for index in range(45):
+        for index in range(105):
             test = test_data[index]
             output = network.forward(test[:4])
             expected = test[-3:]
@@ -82,9 +82,9 @@ while True:
             if predicted_label == true_label:
                 correct[true_label] += 1
         accuracy = sum(correct) / (len(test_data)) * 100
-        print("Iris-setosa: " + str(correct[0] / 15 * 100) + "%")
-        print("Iris-versicolor: " + str(correct[1] / 15 * 100) + "%")
-        print("Iris-virginica: " + str(correct[2] / 15 * 100) + "%")    
+        print("Iris-setosa: " + str(correct[0] / 35 * 100) + "%")
+        print("Iris-versicolor: " + str(correct[1] / 35 * 100) + "%")
+        print("Iris-virginica: " + str(correct[2] / 35 * 100) + "%")    
         print("Total: " + str(accuracy) + "%")
         matrix = confusion_matrix(true_labels, predicted_labels)
         print("\nMacierz pomyłek:")

@@ -66,7 +66,11 @@ class Network:
                     break
 
     def calculateError(self, target, output):
-        return np.sum((target - output) ** 2) / 2
+        error = 0
+        for i in range(len(target)):
+            error += (target[i] - output[i]) ** 2
+        return error / 2
+        #return np.sum((output - target) ** 2) / 2
 
     def test(self, x):
         return self.forward(x)
