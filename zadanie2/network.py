@@ -1,5 +1,6 @@
 from layer import Layer
 import numpy as np
+import matplotlib.pyplot as plt
 
 class Network:
     def __init__(self, num_layers, num_neurons_in_layers, isBias):
@@ -19,18 +20,35 @@ class Network:
     def update(self, lr, momentum):
         for layer in self.layers:
             layer.update(lr, momentum)
+            
+    def errorPlot(self):
+        with open('trainError.txt', 'r') as file:
+            data = file.readlines()
+        epochs = []
+        errors = []
+        for line in data:
+            epoch, error = map(float, line.strip().split())
+            epochs.append(epoch)
+            errors.append(error)
+        plt.plot(epochs, errors, marker='', linestyle='-')
+        plt.title('Error od epoki')
+        plt.xlabel('Epoka')
+        plt.ylabel('Error')
+        plt.grid(True)
+        plt.show()
 
     def train(self, combined_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch):
-        epochsTillSave = errorEpoch
+        with open('trainError.txt', 'w') as file:
+            pass
+        epochsTillSave = errorEpoch + 1
         if stopCondition == 1:
-            for epoch in range(stop):
+            for epoch in range(stop + 1):
                 error = 0
                 if shuffle:
                     combined_data = np.random.permutation(combined_data)
                 for i in range(len(combined_data)):
                     x = combined_data[i][:4]
                     expected = combined_data[i][-3:]
-                    #self.forward(x)
                     output = self.forward(x)
                     self.backward(expected)
                     self.update(learning_rate, momentum)
@@ -50,7 +68,6 @@ class Network:
                 for j in range(len(combined_data)):
                     x = combined_data[j][:4]
                     expected = combined_data[j][-3:]
-                    #self.forward(x)
                     output = self.forward(x)
                     self.backward(expected)
                     self.update(learning_rate, momentum)
@@ -70,7 +87,6 @@ class Network:
         for i in range(len(target)):
             error += (target[i] - output[i]) ** 2
         return error / 2
-        #return np.sum((output - target) ** 2) / 2
 
     def test(self, x):
         return self.forward(x)

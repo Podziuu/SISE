@@ -1,9 +1,6 @@
-#TODO  wczytanie wzorca z pliku, czas trwania nauki
-
 from ucimlrepo import fetch_ucirepo 
 import numpy as np
 from network import Network
-import random
 import pickle
 from sklearn.metrics import confusion_matrix
 
@@ -112,7 +109,6 @@ while True:
         num_neurons.append(3)
         isBias = int(input("Czy chcesz dodac bias?: "))
 
-        #num_epochs = int(input("Podaj liczbę epok: "))
         learning_rate = float(input("Podaj współczynnik uczenia: "))
         momentum = float(input("Podaj współczynnik momentum: "))
 
@@ -127,3 +123,5 @@ while True:
         isNetworkCreated = True
     if option == 4:
         break
+    
+network.errorPlot()
