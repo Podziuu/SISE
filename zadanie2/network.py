@@ -37,7 +37,7 @@ class Network:
         plt.grid(True)
         plt.show()
 
-    def train(self, combined_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch):
+    def train(self, combined_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch, choice):
         with open('trainError.txt', 'w') as file:
             pass
         epochsTillSave = errorEpoch + 1
@@ -48,7 +48,10 @@ class Network:
                     combined_data = np.random.permutation(combined_data)
                 for i in range(len(combined_data)):
                     x = combined_data[i][:4]
-                    expected = combined_data[i][-3:]
+                    if choice == 1:
+                        expected = combined_data[i][-3:]
+                    else:
+                        expected = combined_data[i][-4:]
                     output = self.forward(x)
                     self.backward(expected)
                     self.update(learning_rate, momentum)
@@ -67,7 +70,7 @@ class Network:
                     combined_data = np.random.permutation(combined_data)
                 for j in range(len(combined_data)):
                     x = combined_data[j][:4]
-                    expected = combined_data[j][-3:]
+                    expected = combined_data[j][-4:]
                     output = self.forward(x)
                     self.backward(expected)
                     self.update(learning_rate, momentum)

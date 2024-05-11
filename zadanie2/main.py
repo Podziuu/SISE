@@ -1,8 +1,6 @@
 from ucimlrepo import fetch_ucirepo 
 import numpy as np
 from network import Network
-from layer import Layer
-from neuron import Neuron
 import pickle
 from sklearn.metrics import confusion_matrix
 
@@ -13,29 +11,45 @@ def saveNetwork(network):
 def loadNetwork():
     with open("network.pkl", "rb") as f:
         return pickle.load(f)
-  
-iris = fetch_ucirepo(id=53) 
-  
-X = iris.data.features 
-y = iris.data.targets 
+    
+    
+print("Ktore zadanie chcesz wykonac?")
+print("1. Klasyfikacja irysow")
+print("2. Autoenkoder")
+print("3. Wyjscie")
+choice = int(input("Wybierz opcje: "))
 
-x_array = X.to_numpy()
-true_labels = y.to_numpy()
-target_values = []
-for genre in true_labels:
-    if genre == "Iris-setosa":
-        target_values.append([1, 0, 0])
-    elif genre == "Iris-versicolor":
-        target_values.append([0, 1, 0])
-    elif genre == "Iris-virginica":
-        target_values.append([0, 0, 1])
+if choice == 1: 
+    iris = fetch_ucirepo(id=53) 
+    
+    X = iris.data.features 
+    y = iris.data.targets 
 
-target_values = np.array(target_values)
+    x_array = X.to_numpy()
+    true_labels = y.to_numpy()
+    target_values = []
+    for genre in true_labels:
+        if genre == "Iris-setosa":
+            target_values.append([1, 0, 0])
+        elif genre == "Iris-versicolor":
+            target_values.append([0, 1, 0])
+        elif genre == "Iris-virginica":
+            target_values.append([0, 0, 1])
 
-combined_data = np.concatenate((x_array, target_values), axis=1)
-training_data = np.concatenate((combined_data[0:15], combined_data[50:65], combined_data[100:115]), axis=0)
-test_data = np.concatenate((combined_data[15:50], combined_data[65:100], combined_data[115:150]), axis=0)
+    target_values = np.array(target_values)
 
+    combined_data = np.concatenate((x_array, target_values), axis=1)
+    training_data = np.concatenate((combined_data[0:15], combined_data[50:65], combined_data[100:115]), axis=0)
+    test_data = np.concatenate((combined_data[15:50], combined_data[65:100], combined_data[115:150]), axis=0)
+    
+elif choice == 2:
+    x_array = np.array([[1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1]])
+    y_array = np.array([[1,0,0,0], [0,1,0,0], [0,0,1,0], [0,0,0,1]])
+    combined_data = np.concatenate((x_array, y_array), axis=1)
+    training_data = combined_data
+    test_data = combined_data
+elif choice == 3:
+    exit()
 
 isNetworkCreated = False
 while True:
@@ -63,19 +77,22 @@ while True:
             stop = float(input("Podaj dokladnosc: "))
         shuffle = int(input("Czy chcesz losowac dane? "))
         errorEpoch = int(input("Co ile epok chcesz zapisywac blad? "))
-        network.train(training_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch)
+        network.train(training_data, stopCondition, stop, shuffle, learning_rate, momentum, errorEpoch, choice)
         print("Nauka sieci zakonczona")
 
     if option == 2 and isNetworkCreated:
         with open("trainStats.txt", "w") as file:
             pass
-        correct = [0, 0, 0]
+        correct = choice == 1 and [0, 0, 0] or [0, 0, 0, 0]
         predicted_labels = []
         true_labels = []
-        for index in range(105):
+        for index in range(choice == 1 and 105 or 4):
             test = test_data[index]
             output = network.forward(test[:4])
-            expected = test[-3:]
+            if choice == 1:
+                expected = test[-3:]
+            else:
+                expected = test[-4:]
             true_label = np.argmax(expected)
             predicted_label = np.argmax(output)
             true_labels.append(true_label)
@@ -114,12 +131,18 @@ while True:
                    
         file.close()
 
-
-        accuracy = sum(correct) / (len(test_data)) * 100
-        print("Iris-setosa: " + str(correct[0] / 35 * 100) + "%")
-        print("Iris-versicolor: " + str(correct[1] / 35 * 100) + "%")
-        print("Iris-virginica: " + str(correct[2] / 35 * 100) + "%")    
-        print("Total: " + str(accuracy) + "%")
+        if choice == 1:
+            print("Klasyfikacja irysow")
+            accuracy = sum(correct) / (len(test_data)) * 100
+            print("Iris-setosa: " + str(correct[0] / 35 * 100) + "%")
+            print("Iris-versicolor: " + str(correct[1] / 35 * 100) + "%")
+            print("Iris-virginica: " + str(correct[2] / 35 * 100) + "%")    
+            print("Total: " + str(accuracy) + "%")
+        else:
+            print("Autoenkoder")
+            print("Popelniony blad: ", error)
+            print("Odpowiedzi: ", output)
+            print("Poprawne odpowiedzi: ", expected)
         matrix = confusion_matrix(true_labels, predicted_labels)
         print("\nMacierz pomyłek:")
         print(matrix)
@@ -143,7 +166,7 @@ while True:
         for i in range(num_layers):
             num_neurons.append(int(input("Podaj liczbe neuronow w " + str(i + 1)  + " warstwie ukrytej: ")))
 
-        num_neurons.append(3)
+        num_neurons.append(choice == 1 and 3 or 4)
         isBias = int(input("Czy chcesz dodac bias?: "))
 
         learning_rate = float(input("Podaj współczynnik uczenia: "))

@@ -4,3 +4,4 @@ ukladanki
 results
 network.pkl
 trainError.txt
+trainStats.txt
