@@ -1,6 +1,8 @@
 from ucimlrepo import fetch_ucirepo 
 import numpy as np
 from network import Network
+from layer import Layer
+from neuron import Neuron
 import pickle
 from sklearn.metrics import confusion_matrix
 
@@ -65,6 +67,8 @@ while True:
         print("Nauka sieci zakonczona")
 
     if option == 2 and isNetworkCreated:
+        with open("trainStats.txt", "w") as file:
+            pass
         correct = [0, 0, 0]
         predicted_labels = []
         true_labels = []
@@ -78,6 +82,39 @@ while True:
             predicted_labels.append(predicted_label)
             if predicted_label == true_label:
                 correct[true_label] += 1
+
+            error = network.calculateError(expected, output)
+            neuronWeights = []
+            neuronOutputs = []
+            for i in range(len(network.layers)):
+                layerWeights = []
+                layerOutputs = []
+                for j in range(len(network.layers[i].neurons)):
+                    layerWeights.append(network.layers[i].neurons[j].weights)
+                    layerOutputs.append(network.layers[i].neurons[j].output)
+                neuronWeights.append(layerWeights)
+                neuronOutputs.append(layerOutputs)
+
+            
+            with open("trainStats.txt", "a") as file:
+            
+                file.write(f"Wzorzec numer: {index}, {test[:4]}\n")
+                file.write(f"Popelniony blad dla wzorca: {error}\n")
+                file.write(f"Pozadany wzorzec odpowiedzi: {expected}\n")
+                for i in range(len(output)):
+                    file.write(f"Blad popelniony na {i} wyjsciu: {output[i] - expected[i]}\n")
+                for i in range(len(output)):
+                    file.write(f"Wartosc na {i} wyjsciu: {output[i]}\n")
+                file.write(f"Wartosci wag neuronow wyjsciowych\n {neuronWeights[-1]}\n")
+                for i in reversed(range(len(network.layers) - 1)):
+                    file.write(f"Wartosci wyjsciowe neuronow ukrytych warstwy {i}: {neuronOutputs[i]}\n")
+                for i in reversed(range(len(network.layers) - 1)):
+                    file.write(f"Wartosci wag neuronow ukrytych warstwy {i}:\n {neuronWeights[i]}\n")
+                file.write("\n\n")
+                   
+        file.close()
+
+
         accuracy = sum(correct) / (len(test_data)) * 100
         print("Iris-setosa: " + str(correct[0] / 35 * 100) + "%")
         print("Iris-versicolor: " + str(correct[1] / 35 * 100) + "%")
