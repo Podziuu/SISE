@@ -31,9 +31,9 @@ class Network:
             epochs.append(epoch)
             errors.append(error)
         plt.plot(epochs, errors, marker='', linestyle='-')
-        plt.title('Error od epoki')
+        plt.title('Błąd popełniony w kolejnych epokach nauki sieci')
         plt.xlabel('Epoka')
-        plt.ylabel('Error')
+        plt.ylabel('Błąd')
         plt.grid(True)
         plt.show()
 
