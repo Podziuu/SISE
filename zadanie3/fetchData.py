@@ -17,3 +17,4 @@ variableInformation = mushroom.variables
 print(variableInformation)
 variableInformation.to_csv('zadanie3/data/variable_information.csv') 
 
+#test
